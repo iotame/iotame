@@ -1,0 +1,18 @@
+[package]
+name = "iotame"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.99"
+clap = { version = "4.5.36", features = ["derive"] }
+dotenvy = "0.15.7"
+heed = "0.22.0"
+serde = { version = "1.0.219", features = ["serde_derive"] }
+tokio = "1.47.1"
+tonic = "0.14.1"
+tracing = "0.1.41"
+ulid = { version = "1.2.1", features = ["serde"] }
+
+[build-dependencies]
+tonic-prost-build = "0.14.1"
