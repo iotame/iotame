@@ -25,6 +25,7 @@
   # https://devenv.sh/git-hooks/
   git-hooks.hooks = {
     clippy.enable = true;
+    clippy.files = "./core/**/*.rs";
     alejandra.enable = true;
   };
 }
