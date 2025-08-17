@@ -1,11 +1,10 @@
-use std::time::SystemTime;
-use fern::{DateBased, Dispatch, InitError};
-use fern::colors::{Color, ColoredLevelConfig};
 use crate::config::IotameConfig;
+use fern::colors::{Color, ColoredLevelConfig};
+use fern::{DateBased, Dispatch, InitError};
+use std::time::SystemTime;
 
 pub(crate) fn setup_logger(config: &IotameConfig) -> Result<(), InitError> {
-    let colors = ColoredLevelConfig::new()
-        .info(Color::Green);
+    let colors = ColoredLevelConfig::new().info(Color::Green);
 
     let log_path = config.environment_path.join("logs");
     std::fs::create_dir_all(&log_path)?;

@@ -1,13 +1,13 @@
-use clap::Parser;
-use std::path::PathBuf;
-use server::*;
 use crate::config::IotameConfig;
+use clap::Parser;
 use log::*;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
+use server::*;
+use std::path::PathBuf;
 
-mod server;
-mod logging;
 mod config;
+mod logging;
+mod server;
 
 #[derive(Parser, Debug, Serialize, Deserialize)]
 #[command(version, about, name = "iotame")]
@@ -23,7 +23,7 @@ pub(crate) struct Cli {
 #[derive(clap::Subcommand, Debug, Serialize, Deserialize)]
 pub(crate) enum Commands {
     /// Starts iotame
-    Start(StartArgs)
+    Start(StartArgs),
 }
 
 #[derive(clap::Args, Debug, Serialize, Deserialize)]

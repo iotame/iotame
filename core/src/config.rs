@@ -1,10 +1,10 @@
+use crate::Cli;
+use figment::providers::{Env, Format, Serialized, Yaml};
+use figment::value::{Dict, Map};
+use figment::{Error, Figment, Metadata, Profile, Provider};
+use serde::{Deserialize, Serialize};
 use std::env;
 use std::path::{Path, PathBuf};
-use figment::{Error, Figment, Metadata, Profile, Provider};
-use figment::providers::{Env, Format, Yaml, Serialized};
-use figment::value::{Dict, Map};
-use serde::{Serialize, Deserialize};
-use crate::Cli;
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct IotameConfig {
@@ -77,7 +77,10 @@ impl Provider for IotameConfig {
 
         // Manually add the environment_path to the default profile
         if let Some(dict) = map.get_mut(&Profile::Default) {
-            dict.insert("environment_path".into(), Value::serialize(&self.environment_path)?);
+            dict.insert(
+                "environment_path".into(),
+                Value::serialize(&self.environment_path)?,
+            );
         }
 
         Ok(map)
