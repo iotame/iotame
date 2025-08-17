@@ -24,8 +24,8 @@
 
   # https://devenv.sh/git-hooks/
   git-hooks.hooks = {
-    clippy.enable = true;
-    clippy.files = "./core/**/*.rs";
+    # TODO: Determine how to run clippy only in ./core
+    # clippy.enable = true;
     alejandra.enable = true;
   };
 }
