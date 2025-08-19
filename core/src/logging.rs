@@ -1,12 +1,12 @@
-use crate::config::IotameConfig;
+use std::path::PathBuf;
 use fern::colors::{Color, ColoredLevelConfig};
 use fern::{DateBased, Dispatch, InitError};
 use std::time::SystemTime;
 
-pub(crate) fn setup_logger(config: &IotameConfig) -> Result<(), InitError> {
+pub(crate) fn setup_logger(working_directory: PathBuf, log_level: log::LevelFilter) -> Result<(), InitError> {
     let colors = ColoredLevelConfig::new().info(Color::Green);
 
-    let log_path = config.environment_path.join("logs");
+    let log_path = working_directory.join("logs");
     std::fs::create_dir_all(&log_path)?;
 
     Dispatch::new()
@@ -19,9 +19,9 @@ pub(crate) fn setup_logger(config: &IotameConfig) -> Result<(), InitError> {
                 message
             ))
         })
-        .level(config.log_level)
+        .level(log_level)
         .chain(std::io::stdout())
-        .chain(DateBased::new(log_path.join("iotame.log."), "%d%m%Y"))
+        .chain(DateBased::new(log_path.join("iotame.log."), "%Y%m%d"))
         .apply()?;
 
     Ok(())

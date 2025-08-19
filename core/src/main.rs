@@ -1,20 +1,21 @@
-use crate::config::IotameConfig;
 use clap::Parser;
-use log::*;
 use serde::{Deserialize, Serialize};
-use server::*;
 use std::path::PathBuf;
+use crate::logging::setup_logger;
+use crate::runtime::Runtime;
+use log::*;
 
 mod config;
 mod logging;
 mod server;
+mod runtime;
 
 #[derive(Parser, Debug, Serialize, Deserialize)]
 #[command(version, about, name = "iotame")]
 pub(crate) struct Cli {
-    /// Sets a custom environment path
-    #[arg(short, long, value_name = "DIRECTORY", default_value=IotameConfig::default().environment_path.into_os_string())]
-    environment_path: Option<PathBuf>,
+    /// Sets a custom working directory
+    #[arg(short, long, value_name = "DIRECTORY", default_value=Runtime::default_working_directory().into_os_string())]
+    working_directory: Option<PathBuf>,
 
     #[command(subcommand)]
     command: Commands,
@@ -34,18 +35,17 @@ pub(crate) struct StartArgs {
 }
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
-    let config = IotameConfig::load_or_create(&cli)?;
+    let runtime = Runtime::new(&cli)?;
 
-    logging::setup_logger(&config).unwrap();
-
-    trace!("{config:?}");
-    info!("Initializing application in {:?}", config.environment_path);
+    // Set up logging before doing anything else
+    setup_logger(runtime.working_directory.clone(), runtime.config.log_level)?;
+    trace!("Configuration initialized: {:?}", runtime.config);
 
     match &cli.command {
         Commands::Start(args) => {
-            start_server(args).await;
+            runtime.start(args).await?;
         }
     }
 
