@@ -24,6 +24,7 @@ log = { version = "0.4.27", features = ["kv", "kv_serde", "serde"] }
 figment = { version = "0.10.19", features = ["env", "serde_yaml", "test", "yaml"] }
 serde_yaml = "0.9.34"
 humantime = "2.2.0"
+axum-reverse-proxy = { version = "1.0.3", default-features = false }
 
 [build-dependencies]
 tonic-prost-build = "0.14.1"
